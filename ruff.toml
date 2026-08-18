@@ -1,0 +1,5 @@
+[lint]
+ignore = [
+    "BLE001",   # handlers da API capturam Exception de propósito, para sempre devolver um 500 limpo
+    "ASYNC220", # subprocess.Popen é usado deliberadamente (não bloqueante) no streaming de câmera
+]

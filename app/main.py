@@ -1,22 +1,25 @@
 import asyncio
-from fastapi.responses import HTMLResponse, StreamingResponse
 import base64
 import io
-import time
 import subprocess
-from pathlib import Path
-from fastapi import FastAPI, HTTPException, Response, Query, Request
-from PIL import Image
-import numpy as np
-import httpx
-import cv2
+import time
 
+import cv2
+import httpx
+import numpy as np
+from fastapi import FastAPI, HTTPException, Query, Request, Response
+from fastapi.responses import HTMLResponse, StreamingResponse
+from model import get_default_model_name, load_model
+from PIL import Image
 from schemas import (
-    PredictRequest, PredictResponse,
-    BatchPredictRequest, BatchPredictResponse,
-    HealthResponse, MetricsResponse, Detection
+    BatchPredictRequest,
+    BatchPredictResponse,
+    Detection,
+    HealthResponse,
+    MetricsResponse,
+    PredictRequest,
+    PredictResponse,
 )
-from model import load_model, get_default_model_name
 
 app = FastAPI(
     title="YOLO Inference API",
@@ -58,12 +61,13 @@ def _capture_frame_from_camera(device_id: int = 0) -> np.ndarray:
                 "--height", "480",
                 "-e", "jpg"
             ]
-            result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
-            if result.returncode == 0 and len(result.stdout) > 0:
+            result = subprocess.run(cmd, capture_output=True, timeout=5, check=False)
+	    if result.returncode == 0 and len(result.stdout) > 0:
                 img = Image.open(io.BytesIO(result.stdout)).convert("RGB")
                 return np.array(img)
-        except Exception:
-            pass
+        except Exception as e:  # noqa: BLE001 — tenta o próximo fallback de câmera
+            print(f"[camera] rpicam-still falhou, tentando próximo método: {e}", flush=True)
+
 
     # 2. Fallback para Câmeras USB padrão (V4L2)
     cap = cv2.VideoCapture(device_id)
