@@ -51,6 +51,11 @@ jobs:
           dvc remote modify --local local_remote keyfile ~/.ssh/dvc_key
           dvc pull models/yolov8n.pt
 
+      - name: Disponibiliza o modelo em /app/models (mesmo path usado no Docker)
+        run: |
+          sudo mkdir -p /app
+          sudo ln -sfn "$GITHUB_WORKSPACE/models" /app/models
+          ls -la /app/models
 
       - name: Lint (ruff)
         run: ruff check app/
