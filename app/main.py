@@ -62,10 +62,10 @@ def _capture_frame_from_camera(device_id: int = 0) -> np.ndarray:
                 "-e", "jpg"
             ]
             result = subprocess.run(cmd, capture_output=True, timeout=5, check=False)
-	    if result.returncode == 0 and len(result.stdout) > 0:
+            if result.returncode == 0 and len(result.stdout) > 0:
                 img = Image.open(io.BytesIO(result.stdout)).convert("RGB")
                 return np.array(img)
-        except Exception as e:  # noqa: BLE001 — tenta o próximo fallback de câmera
+        except Exception as e:
             print(f"[camera] rpicam-still falhou, tentando próximo método: {e}", flush=True)
 
 
