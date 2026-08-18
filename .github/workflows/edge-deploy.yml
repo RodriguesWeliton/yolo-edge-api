@@ -26,6 +26,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Conecta à rede Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
       - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
@@ -119,6 +124,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Conecta à rede Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
       - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
@@ -153,6 +163,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Conecta à rede Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
 
       - name: Deploy via SSH com rollback automático
         uses: appleboy/ssh-action@v1
