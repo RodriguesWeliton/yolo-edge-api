@@ -18,6 +18,8 @@ RUN pip install --no-cache-dir torch torchvision --index-url https://download.py
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ .
+COPY preprocessing/preprocessor.py ./preprocessing/
+COPY preprocessing/utils/ ./preprocessing/utils/
 
 EXPOSE 8000
 
